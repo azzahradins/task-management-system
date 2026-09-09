@@ -1,4 +1,5 @@
 import { apiClient } from './apiClient'
+import type { CreateTaskValues } from '../validation/taskSchemas'
 
 export type TaskStatus = 'pending' | 'in-progress' | 'done'
 
@@ -29,6 +30,16 @@ export type GetTasksParams = {
 
 export async function getTasks(params: GetTasksParams = {}) {
   const response = await apiClient.get<TaskListResponse>('/tasks', { params })
+
+  return response.data
+}
+
+export async function createTask(task: CreateTaskValues) {
+  const response = await apiClient.post<Task>('/tasks', {
+    ...task,
+    description: task.description || null,
+    deadline: task.deadline || null,
+  })
 
   return response.data
 }

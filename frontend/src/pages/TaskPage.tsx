@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Button } from '../components/Button'
 import { Card } from '../components/Card'
+import { TaskModal } from '../components/TaskModal'
 import { TextField } from '../components/TextField'
 
 import { useTaskHooks } from '../hooks/useTaskHooks'
@@ -12,8 +13,8 @@ const statusStyles = {
 } as const
 
 export function TaskPage() {
-  const [currentDate, setCurrentDate] = useState(() => new Date())
   const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false)
   const {
     changeSearchTerm,
     changeStatus,
@@ -25,14 +26,8 @@ export function TaskPage() {
     setPage,
     tasks,
     totalPages,
+    refreshTasks,
   } = useTaskHooks()
-
-  useEffect(() => {
-    const timer = window.setInterval(() => setCurrentDate(new Date()), 1000)
-
-    return () => window.clearInterval(timer)
-  }, [])
-
   return (
     <section className="mx-auto w-full max-w-5xl">
       <header className="mb-8 flex flex-col gap-4 border-b border-border pb-6 sm:flex-row sm:items-end sm:justify-between">
@@ -44,12 +39,12 @@ export function TaskPage() {
             Your tasks
           </h1>
         </div>
-        <time className="text-sm font-medium text-body" dateTime={currentDate.toISOString()}>
-          {currentDate.toLocaleString(undefined, {
-            dateStyle: 'medium',
-            timeStyle: 'short',
-          })}
-        </time>
+
+        <div className="flex flex-col items-start gap-3 sm:items-end">
+          <Button className="sm:w-auto bg-zinc-600" onClick={() => setIsTaskModalOpen(true)} type="button">
+            Add New Task
+          </Button>
+        </div>
       </header>
 
       <div className="mb-6 flex flex-col gap-3 sm:flex-row">
@@ -123,11 +118,11 @@ export function TaskPage() {
                 <h2 className="text-lg font-semibold text-heading">{task.title}</h2>
                 <p className="mt-2 text-sm leading-6 text-body">{task.description ?? 'No description provided.'}</p>
               </div>
-                {task.deadline && (
-                  <p className="shrink-0 text-sm font-medium text-label">
-                    Deadline: {new Date(task.deadline).toLocaleString()}
-                  </p>
-                )}
+              {task.deadline && (
+                <p className="shrink-0 text-sm font-medium text-label">
+                  Deadline: {new Date(task.deadline).toLocaleString()}
+                </p>
+              )}
             </div>
           </Card>
         ))}
@@ -139,7 +134,7 @@ export function TaskPage() {
         )}
       </div>
 
-      {!isLoading && !error && totalPages > 1 && (
+      {!isLoading && !error && totalPages > 1 ? (
         <div className="sticky bottom-0 z-10 -mx-4 mt-6 flex items-center justify-between gap-3 border-t border-border bg-background/95 px-4 py-4 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
           <Button
             className="w-auto"
@@ -161,7 +156,14 @@ export function TaskPage() {
             Next
           </Button>
         </div>
-      )}
+      ) : null}
+
+      {isTaskModalOpen ? (
+        <TaskModal
+          onClose={() => setIsTaskModalOpen(false)}
+          onSuccess={refreshTasks}
+        />
+      ) : null}
     </section>
   )
 }

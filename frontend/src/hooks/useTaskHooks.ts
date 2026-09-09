@@ -8,15 +8,18 @@ const PAGE_SIZE = 10
 const SEARCH_DEBOUNCE_MS = 400
 
 export function useTaskHooks() {
+  // state for list tasks
   const [tasks, setTasks] = useState<Task[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
   const [selectedStatus, setSelectedStatus] = useState<TaskFilter>('all')
   
+  // metadata task states
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
+  const [refreshKey, setRefreshKey] = useState(0)
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -27,6 +30,7 @@ export function useTaskHooks() {
   }, [searchTerm])
 
   // Fetch only after debounce finished
+  // Refetch after a task mutation succeeds.
   useEffect(() => {
     let isCurrentRequest = true
 
@@ -68,7 +72,7 @@ export function useTaskHooks() {
     return () => {
       isCurrentRequest = false
     }
-  }, [debouncedSearchTerm, page, selectedStatus])
+  }, [debouncedSearchTerm, page, selectedStatus, refreshKey])
 
   function changeSearchTerm(value: string) {
     setPage(1)
@@ -78,6 +82,10 @@ export function useTaskHooks() {
   function changeStatus(status: TaskFilter) {
     setPage(1)
     setSelectedStatus(status)
+  }
+
+  function refreshTasks() {
+    setRefreshKey((currentKey) => currentKey + 1)
   }
 
   return {
@@ -91,5 +99,6 @@ export function useTaskHooks() {
     setPage,
     tasks,
     totalPages,
+    refreshTasks,
   }
 }
