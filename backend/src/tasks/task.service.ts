@@ -1,4 +1,4 @@
-import { addTask, deleteTask, getTasks, updateTask, type NewTask, type TaskRow } from "./task.model";
+import { addTask, deleteTask, getTasks, updateTask, type NewTask, type TaskRow } from "./task.model.js";
 
 export async function CreateTask(task: NewTask, userId: string) {
   return await addTask(task, userId)

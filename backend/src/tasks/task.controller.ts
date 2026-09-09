@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
-import { AppError } from "../helper/errors";
-import { CreateTask, GetTasks, UpdateTask } from "./task.service";
-import { DeleteTask } from "./task.service";
+import { AppError } from "../helper/errors.js";
+import { CreateTask, GetTasks, UpdateTask } from "./task.service.js";
+import { DeleteTask } from "./task.service.js";
 
 function CreateTaskController(req: Request, res: Response) {
   const { title, description, status, deadline } = req.body;

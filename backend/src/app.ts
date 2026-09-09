@@ -1,9 +1,9 @@
 import express, { type Express } from 'express';
 import cors from 'cors';
-import apiRouter from './routes';
-import { env } from './config/env';
+import apiRouter from './routes/index.js';
+import { env } from './config/env.js';
 
-import { setupSwagger } from './routes/swagger';
+import { setupSwagger } from './routes/swagger.js';
 
 const app: Express = express();
 

@@ -1,6 +1,6 @@
 import type { Request, Response} from "express";
-import { Login, Logout, Register } from "./auth.service";
-import { BadRequestError, NotFoundError } from "../helper/errors";
+import { Login, Logout, Register } from "./auth.service.js";
+import { BadRequestError, NotFoundError } from "../helper/errors.js";
 
 function LoginController(req: Request, res: Response) {
   const { email, password } = req.body;

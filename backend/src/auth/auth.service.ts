@@ -1,7 +1,7 @@
-import { env } from "../config/env";
-import { BadRequestError, NotFoundError } from "../helper/errors";
-import { registerToken, revokeToken } from "../helper/jwt";
-import { addUser, getUserByEmail } from "./auth.model";
+import { env } from "../config/env.js";
+import { BadRequestError, NotFoundError } from "../helper/errors.js";
+import { registerToken, revokeToken } from "../helper/jwt.js";
+import { addUser, getUserByEmail } from "./auth.model.js";
 import bcrypt from "bcrypt";
 
 import jwt from 'jsonwebtoken';

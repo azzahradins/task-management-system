@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { env } from "../config/env";
-import { isRegistered } from "../helper/jwt";
+import { env } from "../config/env.js";
+import { isRegistered } from "../helper/jwt.js";
 
 // helper, to be reusable by tasks token validation
 function authenticate(req: Request, res: Response, next: NextFunction) {

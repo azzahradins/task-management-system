@@ -1,6 +1,6 @@
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
-import { db } from "../config/db";
-import { DatabaseError, NotFoundError } from "../helper/errors";
+import { db } from "../config/db.js";
+import { DatabaseError, NotFoundError } from "../helper/errors.js";
 
 interface TaskDatabaseRow extends RowDataPacket {
   id: number;

@@ -1,5 +1,5 @@
 import z from 'zod'
-import { status } from '../config/constants';
+import { status } from '../config/constants.js';
 
 export const addTaskSchema = z.object({
   title: z.string().min(4, "Task title must be filled, minimal 4 character").max(255, "Task title cannot exceed 255 character"),
