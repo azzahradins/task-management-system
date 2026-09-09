@@ -2,7 +2,7 @@
   "type": "module",
   "scripts": {
     "start": "node dist/server.js",
-    "build": "tsc p .",
+    "build": "tsc -p .",
     "dev": "nodemon --exec tsx src/server.ts"
   },
   "dependencies": {
