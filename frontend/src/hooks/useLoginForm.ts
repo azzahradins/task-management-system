@@ -4,10 +4,9 @@ import { useState } from 'react'
 import type { ChangeEvent, SubmitEventHandler } from 'react'
 import { useAuth } from './useAuth'
 import { login } from '../services/authService'
+import { getFormErrors, type FormErrors } from '../validation/formErrors'
 import {
-	getFormErrors,
 	loginSchema,
-	type FormErrors,
 	type LoginFormValues,
 } from '../validation/authSchemas'
 

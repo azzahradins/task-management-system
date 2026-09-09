@@ -2,10 +2,9 @@ import axios from 'axios'
 import { useState, type ChangeEvent, type SubmitEventHandler } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { register } from '../services/authService'
+import { getFormErrors, type FormErrors } from '../validation/formErrors'
 import {
-	getFormErrors,
 	registerSchema,
-	type FormErrors,
 	type RegisterFormValues,
 } from '../validation/authSchemas'
 
