@@ -3,6 +3,7 @@ import { Button } from '../components/Button'
 import { Card } from '../components/Card'
 import { TaskModal } from '../components/TaskModal'
 import { TextField } from '../components/TextField'
+import type { Task } from '../services/taskService'
 
 import { useTaskHooks } from '../hooks/useTaskHooks'
 
@@ -15,6 +16,7 @@ const statusStyles = {
 export function TaskPage() {
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false)
+  const [editingTask, setEditingTask] = useState<Task | undefined>()
   const {
     changeSearchTerm,
     changeStatus,
@@ -124,6 +126,19 @@ export function TaskPage() {
                 </p>
               )}
             </div>
+            <footer className="mt-5 flex justify-end border-t pt-4">
+              <Button
+                className="w-auto"
+                onClick={() => {
+                  setEditingTask(task)
+                  setIsTaskModalOpen(true)
+                }}
+                type="button"
+                variant="warning"
+              >
+                Edit
+              </Button>
+            </footer>
           </Card>
         ))}
 
@@ -160,8 +175,12 @@ export function TaskPage() {
 
       {isTaskModalOpen ? (
         <TaskModal
+          task={editingTask}
           onClose={() => setIsTaskModalOpen(false)}
-          onSuccess={refreshTasks}
+          onSuccess={() => {
+            refreshTasks()
+            setEditingTask(undefined)
+          }}
         />
       ) : null}
     </section>

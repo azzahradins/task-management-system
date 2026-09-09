@@ -43,3 +43,13 @@ export async function createTask(task: CreateTaskValues) {
 
   return response.data
 }
+
+export async function updateTask(id: number, task: CreateTaskValues) {
+  const response = await apiClient.put<Task>(`/tasks/${id}`, {
+    ...task,
+    description: task.description || null,
+    deadline: task.deadline || null,
+  })
+
+  return response.data
+}
