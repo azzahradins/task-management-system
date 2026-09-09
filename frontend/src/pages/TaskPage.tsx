@@ -1,10 +1,13 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '../components/Button'
 import { Card } from '../components/Card'
 import { DeleteTaskModal } from '../components/DeleteTaskModal'
 import { TaskModal } from '../components/TaskModal'
 import { TextField } from '../components/TextField'
 import type { Task } from '../services/taskService'
+import { logout } from '../services/authService'
+import { useAuth } from '../hooks/useAuth'
 
 import { useTaskHooks } from '../hooks/useTaskHooks'
 
@@ -15,6 +18,8 @@ const statusStyles = {
 } as const
 
 export function TaskPage() {
+  const navigate = useNavigate()
+  const { clearToken } = useAuth()
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false)
   const [editingTask, setEditingTask] = useState<Task | undefined>()
@@ -22,6 +27,15 @@ export function TaskPage() {
   function closeTaskModal() {
     setIsTaskModalOpen(false)
     setEditingTask(undefined)
+  }
+
+  async function handleLogout() {
+    try {
+      await logout()
+    } finally {
+      clearToken()
+      navigate('/login', { replace: true })
+    }
   }
   const [deletingTask, setDeletingTask] = useState<Task | undefined>()
   const {
@@ -50,16 +64,16 @@ export function TaskPage() {
         </div>
 
         <div className="flex flex-col items-start gap-3 sm:items-end">
-          <Button
-            className="sm:w-auto bg-zinc-600"
-            onClick={() => {
-              setEditingTask(undefined)
-              setIsTaskModalOpen(true)
-            }}
-            type="button"
-          >
-            Add New Task
-          </Button>
+          <div className="flex w-fit">
+            <Button
+              className="p-0"
+              onClick={() => void handleLogout()}
+              type="button"
+              variant="danger-outline"
+            >
+              Logout
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -77,7 +91,6 @@ export function TaskPage() {
 
         <div className="relative">
           <Button
-            aria-expanded={isFilterOpen}
             className="sm:w-auto"
             onClick={() => setIsFilterOpen((isOpen) => !isOpen)}
             type="button"
@@ -105,6 +118,17 @@ export function TaskPage() {
             </div>
           )}
         </div>
+
+        <Button
+            className="sm:w-auto bg-zinc-600"
+            onClick={() => {
+              setEditingTask(undefined)
+              setIsTaskModalOpen(true)
+            }}
+            type="button"
+          >
+            Add New Task
+          </Button>
       </div>
 
       {isLoading && (
@@ -135,7 +159,7 @@ export function TaskPage() {
                 <p className="mt-2 text-sm leading-6 text-body">{task.description ?? 'No description provided.'}</p>
               </div>
               {task.deadline && (
-                <p className="shrink-0 text-sm font-medium text-label">
+                <p className="shrink-0 text-sm text-orange-600 font-medium">
                   Deadline: {new Date(task.deadline).toLocaleString()}
                 </p>
               )}
