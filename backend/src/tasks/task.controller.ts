@@ -55,7 +55,7 @@ function DeleteTaskController(req: Request, res: Response) {
   const id = Number(req.params.id);
   DeleteTask(id , res.locals.userId)
     .then(() => {
-      return res.status(204)
+      return res.status(204).json({})
     }).catch(error => {
       const status = error instanceof AppError ? error.statusCode : 500;
       const message = error instanceof Error ? error.message : "Unexpected error";
