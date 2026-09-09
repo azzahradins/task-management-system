@@ -14,7 +14,7 @@ export function RegisterPage() {
   } = useRegisterForm()
 
   return (
-    <div className="mx-auto flex min-h-[100vh] w-full max-w-md items-center justify-center">
+    <div className="mx-auto flex w-full max-w-md items-center justify-center">
       <div className="w-full rounded-2xl bg-surface p-6 shadow-xl shadow-surface-shadow/70 sm:p-8">
         {/* Header Text */}
         <div className="mb-8">

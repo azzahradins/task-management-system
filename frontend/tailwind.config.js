@@ -1,4 +1,5 @@
 import colors from 'tailwindcss/colors'
+import { success } from 'zod';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -22,6 +23,9 @@ export default {
         'focus-soft': colors.gray[300],
         error: colors.red[600],
         'shadow-soft': colors.gray[200],
+        success: colors.green[200],
+        warning: colors.orange[200],
+        info: colors.blue[200]
       },
     },
   },
