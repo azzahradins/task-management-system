@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "description": ""
   },
-  "host": "vps",
+  "host": "http://localhost:3000",
   "servers": [
     {
       "url": "http://localhost:3000"
