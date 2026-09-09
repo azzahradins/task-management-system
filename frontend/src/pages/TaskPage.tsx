@@ -1,70 +1,37 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '../components/Button'
 import { Card } from '../components/Card'
 import { TextField } from '../components/TextField'
 
-type TaskStatus = 'pending' | 'in-progress' | 'done'
+import { useTaskHooks } from '../hooks/useTaskHooks'
 
-type Task = {
-  id: number
-  title: string
-  description: string
-  status: TaskStatus
-  deadline?: Date
-}
-
-const tasks: Task[] = [
-  {
-    id: 1,
-    title: 'Plan the sprint backlog',
-    description: 'Review open work and prepare the next sprint priorities.',
-    status: 'in-progress',
-    deadline: new Date('2026-10-01T13:00:00.000Z')
-  },
-  {
-    id: 2,
-    title: 'Update project documentation',
-    description: 'Add the latest setup steps and API notes to the project docs.',
-    status: 'pending',
-  },
-  {
-    id: 3,
-    title: 'Review completed tasks',
-    description: 'Check the finished work and prepare a short progress summary.',
-    status: 'done',
-  },
-]
-
-const statusStyles: Record<TaskStatus, string> = {
+const statusStyles = {
   'pending': 'bg-warning text-label',
   'in-progress': 'bg-info text-label',
   'done': 'bg-success text-label',
-}
+} as const
 
 export function TaskPage() {
   const [currentDate, setCurrentDate] = useState(() => new Date())
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedStatus, setSelectedStatus] = useState<TaskStatus | 'all'>('all')
   const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const {
+    changeSearchTerm,
+    changeStatus,
+    error,
+    isLoading,
+    page,
+    searchTerm,
+    selectedStatus,
+    setPage,
+    tasks,
+    totalPages,
+  } = useTaskHooks()
 
   useEffect(() => {
     const timer = window.setInterval(() => setCurrentDate(new Date()), 1000)
 
     return () => window.clearInterval(timer)
   }, [])
-
-  const visibleTasks = useMemo(() => {
-    const normalizedSearch = searchTerm.toLowerCase().trim()
-
-    return tasks.filter((task) => {
-      const matchesSearch = `${task.title} ${task.description}`
-        .toLowerCase()
-        .includes(normalizedSearch)
-      const matchesStatus = selectedStatus === 'all' || task.status === selectedStatus
-
-      return matchesSearch && matchesStatus
-    })
-  }, [searchTerm, selectedStatus])
 
   return (
     <section className="mx-auto w-full max-w-5xl">
@@ -90,7 +57,7 @@ export function TaskPage() {
           <TextField
             id="task-search"
             name="task-search"
-            onChange={(event) => setSearchTerm(event.target.value)}
+            onChange={(event) => changeSearchTerm(event.target.value)}
             placeholder="Search tasks"
             type="search"
             value={searchTerm}
@@ -110,12 +77,12 @@ export function TaskPage() {
 
           {isFilterOpen && (
             <div className="absolute right-0 z-10 mt-1 w-full min-w-40 rounded-lg border border-border bg-surface p-2 shadow-lg shadow-shadow-soft/70 sm:w-48">
-              {(['all', 'pending', 'in-progress', 'completed'] as const).map((status) => (
+              {(['all', 'pending', 'in-progress', 'done'] as const).map((status) => (
                 <Button
                   className="rounded-md px-3 py-2 text-left text-sm"
                   key={status}
                   onClick={() => {
-                    setSelectedStatus("done")
+                    changeStatus(status)
                     setIsFilterOpen(false)
                   }}
                   type="button"
@@ -129,8 +96,20 @@ export function TaskPage() {
         </div>
       </div>
 
+      {isLoading && (
+        <p className="rounded-xl border border-border bg-surface p-8 text-center text-sm text-body">
+          Loading tasks...
+        </p>
+      )}
+
+      {error && !isLoading && (
+        <p className="rounded-xl border border-error bg-surface p-8 text-center text-sm text-error" role="alert">
+          {error}
+        </p>
+      )}
+
       <div className="grid gap-4">
-        {visibleTasks.map((task) => (
+        {!isLoading && !error && tasks.map((task) => (
           <Card
             key={task.id}
           >
@@ -142,21 +121,47 @@ export function TaskPage() {
                   </span>
                 </div>
                 <h2 className="text-lg font-semibold text-heading">{task.title}</h2>
-                <p className="mt-2 text-sm leading-6 text-body">{task.description}</p>
+                <p className="mt-2 text-sm leading-6 text-body">{task.description ?? 'No description provided.'}</p>
               </div>
-              {/* {task.deadline &&
-                <p className="shrink-0 text-sm font-medium text-label">Deadline: {task.deadline}</p>
-              } */}
+                {task.deadline && (
+                  <p className="shrink-0 text-sm font-medium text-label">
+                    Deadline: {new Date(task.deadline).toLocaleString()}
+                  </p>
+                )}
             </div>
           </Card>
         ))}
 
-        {visibleTasks.length === 0 && (
+        {!isLoading && !error && tasks.length === 0 && (
           <p className="rounded-xl border border-dashed border-border bg-surface p-8 text-center text-sm text-body">
             No tasks match your search.
           </p>
         )}
       </div>
+
+      {!isLoading && !error && totalPages > 1 && (
+        <div className="sticky bottom-0 z-10 -mx-4 mt-6 flex items-center justify-between gap-3 border-t border-border bg-background/95 px-4 py-4 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+          <Button
+            className="w-auto"
+            disabled={page === 1}
+            onClick={() => setPage((currentPage) => currentPage - 1)}
+            type="button"
+            variant="secondary"
+          >
+            Previous
+          </Button>
+          <span className="text-sm text-body">Page {page} of {totalPages}</span>
+          <Button
+            className="w-auto"
+            disabled={page === totalPages}
+            onClick={() => setPage((currentPage) => currentPage + 1)}
+            type="button"
+            variant="secondary"
+          >
+            Next
+          </Button>
+        </div>
+      )}
     </section>
   )
 }
