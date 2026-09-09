@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { authRoutes } from "../auth/auth.route";
+import { taskRoutes } from "../tasks/task.route";
 
 const router = Router();
 
@@ -10,5 +11,6 @@ router.get('/health', (req, res) => {
 
 // Mount feature sub-routers with base paths
 router.use('/auth', authRoutes);
+router.use('/tasks', taskRoutes);
 
 export default router;

@@ -1,0 +1,1 @@
+export const status = ["pending", "in-progress", "done"]

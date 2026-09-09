@@ -20,6 +20,13 @@ function validate<T extends RequestSchemas>(schema: T) {
       }
     }
 
+    if (schema.params && !errors) {
+      const result = schema.params.safeParse(req.params);
+      if (!result.success) {
+        errors = result.error.issues[0]?.message
+      }
+    }
+
     if (errors) {
       return res.status(400).json({ message: "Bad Request", error: errors });
     }
