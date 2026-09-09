@@ -8,6 +8,7 @@ RUN npm ci
 COPY tsconfig.json ./
 COPY src ./src
 RUN npm run build
+RUN mkdir -p dist/docs && cp src/docs/swagger.json dist/docs/swagger.json
 
 FROM node:22-alpine AS runner
 
