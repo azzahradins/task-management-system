@@ -7,6 +7,7 @@ const envSchema = z.object({
     NODE_ENV: z.enum(['development', 'production']).default('development'),
     NODE_PORT: z.string().default('3000'),
     CORS_ORIGIN: z.string().default('http://localhost:5173'),
+    SWAGGER_SERVER_URL: z.string().url().default('http://localhost:3000'),
     
     DB_HOST: z.string(),
     DB_PORT: z.string(),
