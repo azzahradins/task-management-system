@@ -17,6 +17,11 @@ export function TaskPage() {
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false)
   const [editingTask, setEditingTask] = useState<Task | undefined>()
+
+  function closeTaskModal() {
+    setIsTaskModalOpen(false)
+    setEditingTask(undefined)
+  }
   const {
     changeSearchTerm,
     changeStatus,
@@ -43,7 +48,14 @@ export function TaskPage() {
         </div>
 
         <div className="flex flex-col items-start gap-3 sm:items-end">
-          <Button className="sm:w-auto bg-zinc-600" onClick={() => setIsTaskModalOpen(true)} type="button">
+          <Button
+            className="sm:w-auto bg-zinc-600"
+            onClick={() => {
+              setEditingTask(undefined)
+              setIsTaskModalOpen(true)
+            }}
+            type="button"
+          >
             Add New Task
           </Button>
         </div>
@@ -176,10 +188,9 @@ export function TaskPage() {
       {isTaskModalOpen ? (
         <TaskModal
           task={editingTask}
-          onClose={() => setIsTaskModalOpen(false)}
+          onClose={closeTaskModal}
           onSuccess={() => {
             refreshTasks()
-            setEditingTask(undefined)
           }}
         />
       ) : null}
