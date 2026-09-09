@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Button } from '../components/Button'
 import { Card } from '../components/Card'
+import { DeleteTaskModal } from '../components/DeleteTaskModal'
 import { TaskModal } from '../components/TaskModal'
 import { TextField } from '../components/TextField'
 import type { Task } from '../services/taskService'
@@ -22,6 +23,7 @@ export function TaskPage() {
     setIsTaskModalOpen(false)
     setEditingTask(undefined)
   }
+  const [deletingTask, setDeletingTask] = useState<Task | undefined>()
   const {
     changeSearchTerm,
     changeStatus,
@@ -138,17 +140,25 @@ export function TaskPage() {
                 </p>
               )}
             </div>
-            <footer className="mt-5 flex justify-end border-t pt-4">
+            <footer className="mt-5 w-full flex justify-end gap-3 border-t pt-3 divide-gray-300">
               <Button
-                className="w-auto"
+                className="w-auto "
                 onClick={() => {
                   setEditingTask(task)
                   setIsTaskModalOpen(true)
                 }}
                 type="button"
-                variant="warning"
+                variant="warning-outline"
               >
-                Edit
+                Update
+              </Button>
+              <span className="border-r-2 rounded-none"></span>
+              <Button
+                onClick={() => setDeletingTask(task)}
+                type="button"
+                variant="danger-outline"
+              >
+                Delete
               </Button>
             </footer>
           </Card>
@@ -191,6 +201,17 @@ export function TaskPage() {
           onClose={closeTaskModal}
           onSuccess={() => {
             refreshTasks()
+          }}
+        />
+      ) : null}
+
+      {deletingTask ? (
+        <DeleteTaskModal
+          task={deletingTask}
+          onClose={() => setDeletingTask(undefined)}
+          onSuccess={() => {
+            refreshTasks()
+            setDeletingTask(undefined)
           }}
         />
       ) : null}

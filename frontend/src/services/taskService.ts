@@ -53,3 +53,7 @@ export async function updateTask(id: number, task: CreateTaskValues) {
 
   return response.data
 }
+
+export async function deleteTask(id: number) {
+  await apiClient.delete(`/tasks/${id}`)
+}

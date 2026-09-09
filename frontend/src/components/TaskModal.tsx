@@ -22,13 +22,13 @@ export function TaskModal({ onClose, onSuccess, task }: TaskModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" role="presentation">
       <div className="w-full max-w-lg rounded-2xl bg-surface p-6 shadow-xl sm:p-8" role="dialog">
-        <div className="mb-6 flex items-start justify-between gap-4">
-          <div>
-            <h2 className="text-2xl font-bold text-heading" id="task-modal-title">{isEditing ? 'Edit task' : 'New task'}</h2>
+        <div className="mb-6 grid grid-cols-4 items-start gap-4">
+          <div className="col-span-3 min-w-0">
+            <h2 className="text-2xl font-bold text-heading w-full" id="task-modal-title">{isEditing ? 'Edit task' : 'New task'}</h2>
             <p className="mt-2 text-sm text-body">{isEditing ? 'Update this task.' : 'Add a task to your workspace.'}</p>
           </div>
           <Button
-            className="w-auto px-3 py-2"
+            className="col-span-1 w-full px-2 py-2"
             onClick={onClose}
             type="button"
             variant="secondary">

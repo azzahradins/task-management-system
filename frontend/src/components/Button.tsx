@@ -2,7 +2,7 @@ import type { ButtonHTMLAttributes, ReactNode } from 'react'
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: ReactNode
-  variant?: 'primary' | 'secondary' | 'menu' | 'warning'
+  variant?: 'primary' | 'secondary' | 'menu' | 'warning' | 'warning-outline' | 'danger' | 'danger-outline'
 }
 
 const variantStyles = {
@@ -13,7 +13,13 @@ const variantStyles = {
   menu:
     'bg-surface text-label hover:bg-background',
   warning:
-    'bg-warning text-label'
+    'bg-warning text-label',
+  'warning-outline':
+    'w-fit bg-transparent px-0 py-0 text-orange-500 hover:underline focus:none',
+  danger:
+    'bg-error text-on-primary hover:bg-primary-hover',
+  'danger-outline':
+    'w-fit bg-transparent px-0 py-0 text-error hover:underline',
 } as const
 
 export function Button({

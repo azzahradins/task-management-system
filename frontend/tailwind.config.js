@@ -21,7 +21,7 @@ export default {
         border: colors.slate[300],
         focus: colors.zinc[300],
         'focus-soft': colors.gray[300],
-        error: colors.red[600],
+        error: colors.red[400],
         'shadow-soft': colors.gray[200],
         success: colors.green[200],
         warning: colors.orange[200],
