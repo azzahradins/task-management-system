@@ -15,7 +15,7 @@ const variantStyles = {
   warning:
     'bg-warning text-label',
   'warning-outline':
-    'w-fit bg-transparent px-0 py-0 text-orange-500 hover:underline focus:none',
+    'w-fit bg-transparent px-0 py-0 text-orange-500 hover:underline',
   danger:
     'bg-error text-on-primary hover:bg-primary-hover',
   'danger-outline':
@@ -28,9 +28,13 @@ export function Button({
   variant = 'primary',
   ...buttonProps
 }: ButtonProps) {
+  const focusStyles = variant.endsWith('outline')
+    ? 'focus:outline-none focus:ring-0'
+    : 'focus:outline-none focus:ring-4 focus:ring-focus-soft'
+
   return (
     <button
-      className={`w-full rounded-lg px-4 py-3 text-sm font-semibold transition focus:outline-none focus:ring-4 focus:ring-focus-soft ${variantStyles[variant]} ${className}`}
+      className={`w-full rounded-lg px-4 py-3 text-sm font-semibold transition ${focusStyles} ${variantStyles[variant]} ${className}`}
       {...buttonProps}
     >
       {children}
