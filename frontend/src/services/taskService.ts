@@ -34,22 +34,26 @@ export async function getTasks(params: GetTasksParams = {}) {
   return response.data
 }
 
-export async function createTask(task: CreateTaskValues) {
-  const response = await apiClient.post<Task>('/tasks', {
+function toUtcDeadline(deadline: string | undefined) {
+  return deadline ? new Date(deadline).toISOString() : null
+}
+
+function toTaskPayload(task: CreateTaskValues) {
+  return {
     ...task,
     description: task.description || null,
-    deadline: task.deadline || null,
-  })
+    deadline: toUtcDeadline(task.deadline),
+  }
+}
+
+export async function createTask(task: CreateTaskValues) {
+  const response = await apiClient.post<Task>('/tasks', toTaskPayload(task))
 
   return response.data
 }
 
 export async function updateTask(id: number, task: CreateTaskValues) {
-  const response = await apiClient.put<Task>(`/tasks/${id}`, {
-    ...task,
-    description: task.description || null,
-    deadline: task.deadline || null,
-  })
+  const response = await apiClient.put<Task>(`/tasks/${id}`, toTaskPayload(task))
 
   return response.data
 }
