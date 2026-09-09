@@ -6,14 +6,18 @@ services:
       MYSQL_DATABASE: ${DB_NAME:?DB_NAME is required}
       MYSQL_USER: ${DB_USER:?DB_USER is required}
       MYSQL_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required}
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?DB_ROOT_PASSWORD is required}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required}
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$${MYSQL_ROOT_PASSWORD} --silent"]
       interval: 5s
-      timeout: 5s
+      timeout: 30s
       retries: 20
+    ports:
+      - "7833:3306"
+    networks:
+      - app-network
 
   backend:
     build:
@@ -33,6 +37,8 @@ services:
       JWT_DURATION: ${JWT_DURATION:-900}
     ports:
       - "${BACKEND_PORT:-3001}:3000"
+    networks:
+      - app-network
     depends_on:
       database:
         condition: service_healthy
@@ -47,6 +53,10 @@ services:
       - "${FRONTEND_PORT:-81}:80"
     depends_on:
       - backend
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   mysql_data:
