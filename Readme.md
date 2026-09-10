@@ -54,7 +54,7 @@ Notes: Only setup for base URL API.
 3. Dashboard + CRUD Operations
    ![Dashboard](documentation/ss/dashboard.png)
    ![Create](documentation/ss/create_new_task.png)
-   ![Update](documentation/ss/edit_task.png.png)
+   ![Update](documentation/ss/edit_task.png)
    ![Delete](documentation/ss/delete_task.png)
 
 ### Live Demo
