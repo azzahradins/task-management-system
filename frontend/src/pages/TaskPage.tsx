@@ -198,7 +198,7 @@ export function TaskPage() {
       {!isLoading && !error && totalPages > 1 ? (
         <div className="sticky bottom-0 z-10 -mx-4 mt-6 flex items-center justify-between gap-3 border-t border-border bg-background/95 px-4 py-4 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
           <Button
-            className="w-auto"
+            className="w-28"
             disabled={page === 1}
             onClick={() => setPage((currentPage) => currentPage - 1)}
             type="button"
@@ -206,9 +206,9 @@ export function TaskPage() {
           >
             Previous
           </Button>
-          <span className="text-sm text-body">Page {page} of {totalPages}</span>
+          <span className="text-sm text-body flex-grow text-center">Page {page} of {totalPages}</span>
           <Button
-            className="w-auto"
+            className="w-28"
             disabled={page === totalPages}
             onClick={() => setPage((currentPage) => currentPage + 1)}
             type="button"
